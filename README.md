@@ -1,3 +1,7 @@
+## My repository for learning tasks
+
+You can see the page here: https://narrenlex.github.io/learning/
+
 ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/narrenlex/learning/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
