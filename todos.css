@@ -69,7 +69,7 @@ input:focus {
 }
 
 #counter, #menu, #elemClearCompleted {
-    width: 30%;
+    /*width: 30%;*/
     display: inline;
     padding: 0px;
     margin: 15px 0px;
@@ -78,6 +78,7 @@ input:focus {
 
 #counter {
     float: left;
+    width: 30%;
     padding: 0px 0px 0px 10px;
 }
 
@@ -98,8 +99,52 @@ li {
     font-size: 15px;
     background-color: white;
     border-top: 1px solid darkgrey;
+    
 }
 
 .menuCurrent {
     border: 1px solid pink;
+    padding: 9px 4px;
+    border-radius: 3px;
+}
+
+li:hover {
+    border: 1px solid rgb(253, 216, 223);
+    border-radius: 3px;
+    padding: 9px 4px;
+    cursor: pointer;
+}
+
+#elemClearCompleted:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.completeButton {
+    position: absolute;
+    left: 0px;
+    width: 30px;
+    height: 30px;
+    border:2px solid #a9eca9;
+    border-radius: 15px;
+    margin-left: 3px;
+    background-color: transparent;
+    color: transparent;
+}
+
+.deleteButton {
+    position: absolute;
+    right: 0px;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    color: red;
+    margin-right: 10px;
+    border-color: transparent;
+    font-size: 28px;
+    /*font-family: */
+}
+
+.invisible {
+    display: none;
 }
