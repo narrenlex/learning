@@ -68,7 +68,7 @@ input:focus {
 
 }
 
-#counter, #menu, #clearCompleted {
+#counter, #menu, #elemClearCompleted {
     width: 30%;
     display: inline;
     padding: 0px;
@@ -81,7 +81,7 @@ input:focus {
     padding: 0px 0px 0px 10px;
 }
 
-#clearCompleted {
+#elemClearCompleted {
     float: right;
     text-align: right;
     padding: 0px 10px 0px 0px;
