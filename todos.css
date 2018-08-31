@@ -122,14 +122,35 @@ li:hover {
 
 .completeButton {
     position: absolute;
+    display: inline-block;
     left: 0px;
     width: 30px;
     height: 30px;
-    border:2px solid #a9eca9;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border:2px solid #d2f0d2;
     border-radius: 15px;
     margin-left: 3px;
     background-color: transparent;
     color: transparent;
+}
+
+.completeButton:checked {
+    border:2px solid lightgreen;
+    border-radius: 15px;
+    margin-left: 3px;
+    background-color: transparent;
+    color: transparent;
+}
+
+.completeButton:checked:after {
+    content: '\2714';
+    position: absolute;
+    width: 30px;
+    left: -37px;
+    top: -10px;
+    color: grey;
+    
 }
 
 .deleteButton {
@@ -147,4 +168,34 @@ li:hover {
 
 .invisible {
     display: none;
+}
+
+#completeAll {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 30px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    background-color: transparent;
+    color: transparent;
+}
+
+#completeAll:after {
+    content: '\2714';
+    position: absolute;
+    width: 30px;
+    left: -37px;
+    top: 10px;
+    color: lightgrey;
+}
+
+#completeAll:checked:after {
+    content: '\2714';
+    position: absolute;
+    width: 30px;
+    left: -37px;
+    top: 10px;
+    color: grey;
 }
