@@ -1,28 +1,38 @@
 inputTask.addEventListener("keydown", function (event) {
     if (event.keyCode == 13) {
-        addTask(inputTask.value);
+        addTask(inputTask.value, 'active');
         return false;
     };
 });
 
-function addTask(task) {
+function addTask(task, taskStatus) {
     //var task = inputTask.value;
     
     var newTask = document.createElement('p');
     newTask.innerHTML = task;
-    newTask.classList = "task active";
+    newTask.classList.add('task');
+    newTask.classList.add(taskStatus || 'active');
     
-    var completeButton = document.createElement('input');
-    completeButton.type = 'checkbox';
-    completeButton.classList.add('completeButton');
-    completeButton.onclick = function() {return completeTask(this.parentNode)};
+    var completeButton = document.createElement('label');
+    var completeButtonChkBx = document.createElement('input');
+    completeButtonChkBx.type = 'checkbox';
+    completeButton.classList.add('chkBxContainer');
+    completeButtonChkBx.classList.add('chkBxInput');
+    completeButtonChkBx.onclick = function() {return completeTask(this.parentNode.parentNode)};
+    completeButton.appendChild(completeButtonChkBx);
+    var completeButtonChecked = document.createElement('span');
+    completeButtonChecked.classList.add('chkBxCheckmark');
+    completeButton.appendChild(completeButtonChecked);
     newTask.appendChild(completeButton);
     
     var deleteButton = document.createElement('button');
-    deleteButton.classList.add('deleteButton', 'invisible');
+    deleteButton.classList.add('deleteButton');
+    if (taskStatus == 'active') {deleteButton.classList.add('invisible');};
     deleteButton.onclick = function() {return deleteTask(this.parentNode)};
-    deleteButton.innerHTML = 'X';
+    deleteButton.innerHTML = '&#x2715';
     newTask.appendChild(deleteButton);
+
+    ///newTask.addEventListener('dblclick', function() {return editTask(this)});
     
     footer.insertAdjacentElement('beforeBegin', newTask);
     inputTask.value = "";
@@ -40,8 +50,15 @@ function completeTask(task) {
     task.classList.toggle('completed');
     task.classList.toggle('active');
     task.lastChild.classList.toggle('invisible');
-    task.children[0].checked = !task.children[0].checked;
+    if (task.children[0].checked == false) {
+        task.children[0].checked = true;
+    } else {
+        task.children[0].checked = false;
+    };
+    console.log(task.textContent.slice(0, -1), 'checked:', task.children[0].checked);
+    console.log('all checked:', completeAll.checked);
     activeTaskCount();
+    taskCount();
 };
 
 function completeAllFunc() {
@@ -53,6 +70,7 @@ function completeAllFunc() {
             activeTasks[0].classList.toggle('completed');
             activeTasks[0].classList.toggle('active');
         }
+        completeAll.checked = true;
     } else {
         tasks = document.getElementsByClassName('task');
         for (let i = 0; i < tasks.length; i++) {
@@ -61,7 +79,9 @@ function completeAllFunc() {
             tasks[i].children[1].classList.toggle('invisible');
             tasks[i].children[1].checked = false;
         }
+        completeAll.checked = false;
     }
+    console.log('all checked:', completeAll.checked);
     activeTaskCount();
 }
 
@@ -81,6 +101,7 @@ function activeTaskCount() {
         var word = ' tasks left';
     };
     counter.innerHTML = activeTasks.length + word;
+    return activeTasks.length;
 };
 
 function taskCount() {
@@ -91,7 +112,13 @@ function taskCount() {
     } else {
         footer.style.display = '';
         completeAll.classList.remove('invisible');
+        if (tasks.length == activeTaskCount()) {
+            completeAll.checked = true;
+        } else {
+            completeAll.checked = false;
+        }
     };
+    return tasks.length;
 };
 
 menu.children[0].onclick = function() {
@@ -138,8 +165,8 @@ function storeAll() {
     if (tasks.length) {
         for (let i = 0; i < tasks.length; i++) {
             let theTask = {
-                'text' : tasks[i].innerHTML,
-                'classes' : tasks[i].classList.value
+                'text' : tasks[i].textContent.slice(0, -1),
+                'classes' : tasks[i].classList.value.replace('task', '').replace(' ', '')
             };
             theTaskJson = JSON.stringify(theTask);
             localStorage.setItem(i, theTaskJson);
@@ -154,24 +181,53 @@ function restoreAll() {
             let theTaskJson = localStorage.getItem(i);
             //console.log(theTaskJson);
             let theTask = JSON.parse(theTaskJson);
-            //console.log(theTask);
-            let restoredTask = document.createElement('p');
-            restoredTask.innerHTML = theTask['text'];
-            restoredTask.classList = theTask['classes'];
-            footer.insertAdjacentElement('beforeBegin', restoredTask);
+            console.log(theTask);
+            addTask(theTask.text, theTask.classes);
         };
     }
 
     localStorage.clear();
 }
 
+function editTask(task) {
+    task.hidden = true;
+    var editField = document.createElement('input');
+    editField.type = 'text';
+    editField.style.position = 'absolute';
+    editField.style.left = '30px';
+    editField.style.width = (task.style.width.replace('px','') - 30) + 'px';
+    editField.placeholder = task.textContent.slice(0, -1);
+    
+    editField.addEventListener("keydown", function (event) {
+        if (event.keyCode == 13) {
+            //console.log(editField.value, task.textContent.replace('X',''));
+            var temp = task.innerHTML;
+            console.log(temp, temp.type);
+            temp.replace(task.textContent.slice(0, -1), editField.value);
+            console.log(temp, temp.type, task.textContent.slice(0, -1).type, editField.value);
+            task.innerHTML = temp;
+            //task.innerHTML.replace(task.textContent.replace('X',''), editField.value);
+            task.hidden = false;
+            taskList.removeChild(editField);
+            return false;
+        };
+    });
+
+    taskList.appendChild(editField);
+}
+
+function addTaskList() {
+    var cln = taskList.cloneNode(true);
+    cln.
+    document.body.appendChild(cln);
+    taskList.insertAdjacentElement('afterEnd', cln);
+}
+
 elemClearCompleted.addEventListener('click', clearCompleted);
 completeAll.addEventListener('click', completeAllFunc);
 window.addEventListener('unload', storeAll);
+//elemAddTaskList.addEventListener('click', addTaskList);
 
 restoreAll();
 taskCount();
 activeTaskCount();
-
-
-

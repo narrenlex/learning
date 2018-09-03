@@ -14,7 +14,7 @@ h1 {
 }
 
 #taskList {
-    position: absolute;
+    position: relative;
     width: 550px;
     margin-left: -275px;
     left: 50%;
@@ -45,6 +45,7 @@ input:focus {
 
 .task {
     width: 470px;
+    height: 25px;
     background-color: white;
     font-size: 30px;
     padding: 20px 40px;
@@ -120,7 +121,7 @@ li:hover {
     text-decoration: underline;
 }
 
-.completeButton {
+.chkBxContainer {
     position: absolute;
     display: inline-block;
     left: 0px;
@@ -135,25 +136,37 @@ li:hover {
     color: transparent;
 }
 
-.completeButton:checked {
-    border:2px solid lightgreen;
-    border-radius: 15px;
-    margin-left: 3px;
-    background-color: transparent;
-    color: transparent;
+.chkBxInput {
+    height: 30px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
-.completeButton:checked:after {
+.chkBxContainer chkBxInput {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.chkBxCheckmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30px;
+    width: 30px;
+}
+
+.chkBxInput:checked:after {
     content: '\2714';
     position: absolute;
     width: 30px;
     left: -37px;
-    top: -10px;
+    top: -5px;
     color: grey;
-    
 }
 
 .deleteButton {
+    content: '\2716';
     position: absolute;
     right: 0px;
     width: 30px;
@@ -163,7 +176,6 @@ li:hover {
     margin-right: 10px;
     border-color: transparent;
     font-size: 28px;
-    /*font-family: */
 }
 
 .invisible {
@@ -198,4 +210,10 @@ li:hover {
     left: -37px;
     top: 10px;
     color: grey;
+}
+
+#elemAddTaskList {
+    display: block;
+    width: 100%;
+    text-align: center;
 }
