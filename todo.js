@@ -1,3 +1,11 @@
+const APP_ID = '5B46A46F-E44E-F69F-FF1A-3188A8522400';
+const API_KEY = '0D993BB0-F277-9F93-FF12-649C0CCD9500';
+
+Backendless.serverURL = 'https://api.backendless.com';
+Backendless.initApp(APP_ID, API_KEY);
+
+const todoTableStore = Backendless.Data.of('todo');
+
 inputTask.addEventListener("keydown", function (event) {
     if (event.keyCode == 13) {
         addTask(inputTask.value);
@@ -141,11 +149,19 @@ function storeAll() {
                 'text' : tasks[i].innerHTML,
                 'classes' : tasks[i].classList.value
             };
-            theTaskJson = JSON.stringify(theTask);
-            localStorage.setItem(i, theTaskJson);
-        }
+            //console.log(theTask);
+            todoTableStore.save(theTask)
+                .then(function( savedObject ) {
+                    console.log( "instance has been saved: " + savedObject.objectId );
+                  })
+                .catch( function( error ) {
+                    console.log( "an error has occurred " + error.message );
+                  });
+            //theTaskJson = JSON.stringify(theTask);
+            //localStorage.setItem(i, theTaskJson);
+        };
         //localStorage.setItem('storedData', tasksArr);
-    }
+    };
 }
 
 function restoreAll() {
@@ -165,13 +181,43 @@ function restoreAll() {
     localStorage.clear();
 }
 
+function restoreAllBackendless() {
+    todoTableStore.find()
+        .then( function( result ) {
+            console.log(result, result.length);
+            //taskArr = result;
+            if (result.length != 0) {
+                for (let i = 0; i < result.length; i++) {
+                    let theTask = result[i];
+                    console.log(theTask);
+                    let restoredTask = document.createElement('p');
+                    restoredTask.innerHTML = theTask['text'];
+                    restoredTask.classList = theTask['classes'];
+                    footer.insertAdjacentElement('beforeBegin', restoredTask);
+                    todoTableStore.remove(result[i])
+                        .then( function( timestamp ) {
+                            console.log( "Contact instance has been deleted" + timestamp.time);
+                        })
+                        .catch( function( error ) {
+                            console.log( "an error has occurred " + error.message );
+                        })
+                };
+            };
+        })
+       .catch( function( error ) {
+            console.log(error.message);
+        });
+    
+}
+
 elemClearCompleted.addEventListener('click', clearCompleted);
 completeAll.addEventListener('click', completeAllFunc);
 window.addEventListener('unload', storeAll);
 
-restoreAll();
+restoreAllBackendless();
 taskCount();
 activeTaskCount();
+//storeAll();
 
 
 
